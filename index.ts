@@ -7,6 +7,10 @@ app.use(express.json());
 
 const client = new Totalvoice("4a16165966b020c5dbe4a8879ebbd637");
 
+app.get("/teste", (req, res) => {
+  return res.send({ message: "opaa" });
+});
+
 app.post("/notification", (req, res) => {
   const actions: IAction = {
     fireMessage: "TA PEGANDO FOGO BIXO",
