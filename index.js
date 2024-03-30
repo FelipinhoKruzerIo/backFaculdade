@@ -1,4 +1,3 @@
-import { IAction } from "./models/action-interface";
 import Totalvoice from "totalvoice-node";
 import express from "express";
 
@@ -12,14 +11,14 @@ app.get("/teste", (req, res) => {
 });
 
 app.post("/notification", (req, res) => {
-  const actions: IAction = {
+  const actions = {
     fireMessage: "TA PEGANDO FOGO BIXO",
     gasMessage:
       "TA VAZANDO GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS",
     fallMessage: "ME DERRUBARO AKI PO",
   };
-  const action: string = req?.body?.action;
-  const phone: string = req?.body?.phone;
+  const action = req?.body?.action;
+  const phone = req?.body?.phone;
   if (!actions[action] || !phone) {
     res.status = 400;
     return res.json({
