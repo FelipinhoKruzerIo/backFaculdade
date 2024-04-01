@@ -1,5 +1,5 @@
-import Totalvoice from "totalvoice-node";
-import express from "express";
+const Totalvoice = require("totalvoice-node");
+const express = require("express");
 
 const app = express();
 app.use(express.json());
