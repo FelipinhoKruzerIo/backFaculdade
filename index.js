@@ -1,54 +1,45 @@
-const Totalvoice = require("totalvoice-node");
+require("dotenv").config();
 const express = require("express");
-
+const cors = require("cors");
+const corsOptions = require("./config/corsOptions");
 const app = express();
+const credentials = require("./middlewares/credentials");
+const cookieParser = require("cookie-parser");
+const verifyJWT = require("./middlewares/verifyJWT");
+const mongoose = require("mongoose");
+const connectDB = require("./config/dbConnection");
+
+// Connect to MongoDB
+connectDB();
+
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
+
+// built-in middleware to handle urlencoded form data
+app.use(express.urlencoded({ extended: false }));
+
+// built-in middleware for json
 app.use(express.json());
 
-const client = new Totalvoice("4a16165966b020c5dbe4a8879ebbd637");
+//middleware for cookies
+app.use(cookieParser());
 
-app.get("/teste", (req, res) => {
-  return res.send({ message: "opaa" });
-});
+// routes
+app.use("/register", require("./routes/register"));
+app.use("/auth", require("./routes/auth"));
+app.use("/refresh", require("./routes/refresh"));
+app.use("/logout", require("./routes/logout"));
 
-app.post("/notification", (req, res) => {
-  const actions = {
-    fireMessage: "TA PEGANDO FOGO BIXO",
-    gasMessage:
-      "TA VAZANDO GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS",
-    fallMessage: "ME DERRUBARO AKI PO",
-  };
-  const action = req?.body?.action;
-  const phone = req?.body?.phone;
-  if (!actions[action] || !phone) {
-    res.status = 400;
-    return res.json({
-      message: !actions[action]
-        ? `Ação inválida, as ações disponíveis são: ${Object.keys(actions)}`
-        : "Telefone é obrigatório",
-    });
-  }
+app.use(verifyJWT);
+app.use("/notification", require("./routes/notifications"));
+app.use("/users", require("./routes/users"));
 
-  const message = actions[action];
-  const options = {
-    velocidade: 2,
-    tipo_voz: "br-Vitoria",
-  };
-  client.tts
-    .enviar(phone, message, options)
-    .then(() => {
-      return res.json({
-        message: "A pessoa recebeu a ligação !!",
-        status: 200,
-      });
-    })
-    .catch(() => {
-      return res.json({
-        message: "não foi possível realizar a ligação",
-        status: 500,
-      });
-    });
-});
-
-app.listen(3000, () => {
-  console.log("Servidor está funcionando");
+mongoose.connection.once("open", () => {
+  app.listen(3000, () => {
+    console.log("Servidor está funcionando");
+  });
 });
