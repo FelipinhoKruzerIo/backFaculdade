@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const verifyJWT = require("./middlewares/verifyJWT");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConnection");
+const port = process.env.PORT || 3001;
 
 // Connect to MongoDB
 connectDB();
@@ -39,7 +40,7 @@ app.use("/notification", require("./routes/notifications"));
 app.use("/users", require("./routes/users"));
 
 mongoose.connection.once("open", () => {
-  app.listen(3001, () => {
+  app.listen(port, "0.0.0.0", () => {
     console.log("Servidor está funcionando");
   });
 });
