@@ -2,10 +2,13 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DATABASE_URI, {
-      useUnifiedTopology: true,
+    mongoose.set("strictQuery", true);
+
+    mongoose.connect(process.env.DATABASE_URI, {
       useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
+    console.log("Conectou no bancoo");
   } catch (err) {
     console.error(err);
   }
