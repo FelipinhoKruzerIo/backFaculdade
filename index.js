@@ -39,7 +39,7 @@ app.use("/notification", require("./routes/notifications"));
 app.use("/users", require("./routes/users"));
 
 mongoose.connection.once("open", () => {
-  app.listen(3000, () => {
+  app.listen(3001, () => {
     console.log("Servidor está funcionando");
   });
 });
