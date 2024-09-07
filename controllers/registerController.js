@@ -11,7 +11,9 @@ const handleNewUser = async (req, res) => {
   try {
     // check for duplicate usernames in the db
     const duplicate = await User.findOne({ email }).exec();
-    if (duplicate) return res.sendStatus(409); //Conflict
+    if (duplicate) {
+      return res.status(409).json({ message: "Email já cadastrado" });
+    } //Conflict
 
     //encrypt the password
     const hashedPwd = await bcrypt.hash(password, 10);
@@ -24,7 +26,7 @@ const handleNewUser = async (req, res) => {
 
     res
       .status(201)
-      .json({ success: `New user ${email} created!`, insertedUser: result });
+      .json({ message: `Novo usuário ${email} criado!`, insertedUser: result });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

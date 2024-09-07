@@ -50,14 +50,14 @@ const createNewUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const payload = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      age: req.body.age,
-      gender: req.body.gender,
-      userType: req.body.userType,
-      email: req.body.email,
-      phone: req.body.phone,
-      password: req.body.password,
+      firstName: req.body?.firstName,
+      lastName: req.body?.lastName,
+      age: req.body?.age,
+      gender: req.body?.gender,
+      userType: req.body?.userType,
+      email: req.body?.email,
+      phone: req.body?.phone,
+      password: req.body?.password,
     };
 
     const filteredPayload = Object.entries(payload).reduce(
@@ -85,7 +85,7 @@ const updateUser = async (req, res) => {
       user[key] = value;
     });
     const result = await user.save();
-    res.json(result);
+    res.json({ user: result });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -122,7 +122,7 @@ const getUser = async (req, res) => {
         .status(204)
         .json({ message: `No user matches ID ${req.params.id}.` });
     }
-    res.json(user);
+    res.json({ message: user });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
