@@ -15,7 +15,7 @@ const availableFields = [
 const getAllUsers = async (req, res) => {
   const users = await User.find();
   if (!users) return res.status(204).json({ message: "No users found" });
-  res.json(users);
+  return res.json(users);
 };
 
 const createNewUser = async (req, res) => {
@@ -39,11 +39,11 @@ const createNewUser = async (req, res) => {
       password: hashedPwd,
     });
 
-    res
+    return res
       .status(201)
       .json({ success: `New user ${email} created!`, insertedUser: result });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -85,9 +85,9 @@ const updateUser = async (req, res) => {
       user[key] = value;
     });
     const result = await user.save();
-    res.json({ user: result });
+    return res.json({ user: result });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -103,9 +103,9 @@ const deleteUser = async (req, res) => {
         .json({ message: `No user matches ID ${req.params.id}.` });
     }
     const result = await user.deleteOne(); //{ _id: req.body.id }
-    res.json(result);
+    return res.json(result);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -122,9 +122,9 @@ const getUser = async (req, res) => {
         .status(204)
         .json({ message: `No user matches ID ${req.params.id}.` });
     }
-    res.json({ message: user });
+    return res.json({ message: user });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 

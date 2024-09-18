@@ -10,7 +10,6 @@ const verifyJWT = (req, res, next) => {
     req.email = decoded.email;
     next();
   });
-  next();
 };
 
 module.exports = verifyJWT;
