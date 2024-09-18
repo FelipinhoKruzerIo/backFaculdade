@@ -36,7 +36,7 @@ app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
 app.use(verifyJWT);
-app.use("/notification", require("./routes/notifications"));
+app.use("/notifications", require("./routes/notifications"));
 app.use("/users", require("./routes/users"));
 
 mongoose.connection.once("open", () => {
